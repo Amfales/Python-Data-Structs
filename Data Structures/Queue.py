@@ -11,7 +11,7 @@ class Queue():
         return self._length
 
     def __str__(self):
-        return "[%s]" % (' '.join(map(str,self._items)))
+        return "Queue: [%s]" % (' '.join(map(str,self._items)))
 
     def enqueue(self,item):
         self._items.append(item)
