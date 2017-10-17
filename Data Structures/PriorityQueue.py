@@ -15,24 +15,34 @@ class PriorityQueue():
         return self._length
 
     def __str__(self):
-        return "Priority Queue: [%s]" % (' '.join(map(str,self._items)))
+        return "Priority Queue: [%s]" % \
+    (' '.join(map(str,map(lambda x: x[-1],self._items))))
 
     def insert(self,prior,item):
         if (item in self._lookup):
             self._deleteItem(item)
         tempItem = [prior if self._isMinHeap else -1*prior
                     ,next(self._gen),item]
-        self._lookup[tempItem[-1]] = tempItem
+        self._lookup[item] = tempItem
         hq.heappush(self._items,tempItem)
         self._length += 1
 
-    def deleteMin(self):
+    def getMinItem(self):
         while self:
-            item = hq.heappop(self._items)
-            if item[-1] is not _REMOVED:
-                del self._lookup[item[-1]]
+            prior,pos,item = hq.heappop(self._items)
+            if item is not _REMOVED:
+                del self._lookup[item]
                 self._length -= 1
                 return item
+        raise KeyError("Empty Priority Queue")
+
+    def getMinItemWithPriority(self):
+        while self:
+            prior,pos,item = hq.heappop(self._items)
+            if item is not _REMOVED:
+                del self._lookup[item]
+                self._length -= 1
+                return (prior,item)
         raise KeyError("Empty Priority Queue")
 
     def _deleteItem(self,item):
@@ -67,7 +77,7 @@ def main():
     print(pq)
 
     print("Deleting smallest value")
-    item = pq.deleteMin()
+    item = pq.getMinItem()
     print("Item deleted: %s" % (str(item)))
     print(pq)
 
